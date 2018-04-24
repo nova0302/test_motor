@@ -15,7 +15,7 @@ module edge_detect_array
 	     ,.clk(clk)
 	     ,.rise(rise_array[i])
 	     ,.fall(fall_array[i]));
-	   end
+      end
    endgenerate
    
 

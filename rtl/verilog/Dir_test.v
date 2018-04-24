@@ -34,7 +34,7 @@ module  Dir_test
       ,.rise_array( rise           )
       ,.fall_array( fall           ));
 
-   assign en = (State != sHOME) ? 1'b1 : 1'b0;
+   assign en = (State != sHOME); 
 
    always@(posedge CLK, negedge RSTn)
      if(!RSTn)

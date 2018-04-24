@@ -5,10 +5,18 @@
 # Settings File (.qsf) and the list of source files used.
 ###################################################################
 
-PROJECT = Dir_test
+PROJECT = top
 TOP_LEVEL_ENTITY = $(PROJECT)
 ASSIGNMENT_FILES = $(PROJECT).qpf $(PROJECT).qsf
-SRCS = ./../../../rtl/verilog/$(PROJECT).v
+_VSRCS = \
+       $(PROJECT).v \
+       Dir_test.v \
+       edge_detect_array.v \
+       edge_detect.v \
+       led_test.v \
+       Pulse_test.v
+VDIR = ./../../../rtl/verilog
+VSRCS = $(addprefix $(VDIR)/,$(_VSRCS))
 
 ###################################################################
 # Part, Family, Boardfile DE1 or DE2
@@ -49,15 +57,15 @@ smart: output_files/smart.log
 ###################################################################
 ifdef GATE_SIM
 MAP_ARGS = --family=$(FAMILY) --write_settings_files=on \
-	     $(addprefix --source=,$(SRCS)) \
+	     $(addprefix --source=,$(VSRCS)) \
 	   --verilog_macro="SIMULATION=1"
 else
 MAP_ARGS = --family=$(FAMILY) --write_settings_files=on \
-	     $(addprefix --source=,$(SRCS)) 
+	     $(addprefix --source=,$(VSRCS)) 
 endif
 FIT_ARGS = --part=$(PART) --read_settings_files=on
 ASM_ARGS =
-STA_ARGS = --sdc=led_test.sdc
+STA_ARGS = --sdc=$(PROJECT).sdc
 EDA_ARGS = --simulation --tool=modelsim --format=verilog\
 --output_directory=./../../sim/gate_sim
 
