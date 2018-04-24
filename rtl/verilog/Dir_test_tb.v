@@ -1,3 +1,4 @@
+`define SV
 `timescale 1ns/10ps
 
 module Dir_test_tb (/*AUTOARG*/) ;
@@ -19,7 +20,7 @@ module Dir_test_tb (/*AUTOARG*/) ;
       begin
 	 repeat(nDly)@(posedge CLK);
 	 IR1 <= 1'b0;
-	 repeat(3)@(posedge CLK);
+	 repeat(13)@(posedge CLK);
 	 IR1 <= 1'b1;
       end
    endtask // repeat
@@ -28,7 +29,7 @@ module Dir_test_tb (/*AUTOARG*/) ;
       begin
 	 repeat(nDly)@(posedge CLK);
 	 IR2 <= 1'b0;
-	 repeat(3)@(posedge CLK);
+	 repeat(13)@(posedge CLK);
 	 IR2 <= 1'b1;
       end
    endtask // repeat
@@ -37,7 +38,7 @@ module Dir_test_tb (/*AUTOARG*/) ;
       begin
 	 repeat(nDly)@(posedge CLK);
 	 IR3 <= 1'b0;
-	 repeat(3)@(posedge CLK);
+	 repeat(13)@(posedge CLK);
 	 IR3 <= 1'b1;
       end
    endtask // repeat
@@ -50,14 +51,14 @@ module Dir_test_tb (/*AUTOARG*/) ;
       repeat(1) @(posedge CLK);
       fork 
 	 tDrv1(1);
-	 tDrv2(3);
-	 tDrv3(5);
+	 tDrv2(4);
+	 tDrv3(8);
       join
       repeat(2) @(posedge CLK);
       fork 
 	 tDrv3(1);
-	 tDrv2(3);
-	 tDrv1(5);
+	 tDrv2(4);
+	 tDrv1(8);
       join
       repeat(5) @(posedge CLK);
       $stop;
@@ -65,7 +66,13 @@ module Dir_test_tb (/*AUTOARG*/) ;
    end // block: my_initial
 
    always@(posedge CLK)
-     $display("@%4t IR1:%b IR2:%b IR3:%b State:%2b", $time, IR1, IR2, IR3, dut.State);
+`ifdef SV
+     $display("@%4t IR1:%b IR2:%b IR3:%b State:%s", 
+	      $time, IR1, IR2, IR3, dut.State);
+`else
+   $display("@%4t IR1:%b IR2:%b IR3:%b State:%4b", 
+	    $time, IR1, IR2, IR3, dut.State);
+`endif
 
    
    initial begin
