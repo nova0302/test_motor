@@ -1,4 +1,4 @@
-`define SV
+//`define SV
 `timescale 1ns/10ps
 
 module Dir_test_tb (/*AUTOARG*/) ;

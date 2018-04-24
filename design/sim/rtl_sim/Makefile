@@ -6,11 +6,12 @@ VLOG =  vlog
 VSIM =  vsim
 
 WORK = work
-ifdef SV
-VLOG_OPTIONS = -sv -lint -y $(VDIR) +libext+.v +incdir+$(VDIR) +define+SV
-else
+
 VLOG_OPTIONS = -lint -y $(VDIR) +libext+.v +incdir+$(VDIR) 
+ifdef SV
+VLOG_OPTIONS += -sv +define+SV 
 endif
+
 VSIM_OPTIONS = -c -novopt -do "run -all; quit"
 GVSIM_OPTIONS = -novopt -do "add wave *; radix -hex; run -all; quit"
 
