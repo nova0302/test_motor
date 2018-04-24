@@ -10,20 +10,23 @@ set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
 
 set_global_assignment -name SEARCH_PATH "./../../../rtl/verilog"
-#set_global_assignment -name SEARCH_PATH "./../../../rtl/vhdl"
 
-set_location_assignment PIN_P11 -to CLK
-set_location_assignment PIN_B8  -to RSTn
-set_location_assignment PIN_A8  -to SP
-set_location_assignment PIN_A7  -to STEP
+set_location_assignment PIN_J10 -to CLK
+set_location_assignment PIN_D17 -to STEP
+set_location_assignment PIN_R20 -to RST1
+set_location_assignment PIN_C18 -to DIR
+set_location_assignment PIN_A19 -to EN
+set_location_assignment PIN_B19 -to SW
+set_location_assignment PIN_E16 -to IR2
+set_location_assignment PIN_A20 -to IR1
+set_location_assignment PIN_C19 -to IR3
 
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL"  -to CLK
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL"  -to RSTn
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL"  -to SP
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL"  -to STEP
-
-#set_location_assignment PIN_A9 -to led[1]
-#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[1]
-#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to btn[0]
-#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to btn[1]
-
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to RST1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to STEP
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SW
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to EN
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to DIR
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to IR2
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to IR1
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to IR3

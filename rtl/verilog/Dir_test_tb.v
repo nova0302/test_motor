@@ -6,15 +6,17 @@ module Dir_test_tb (/*AUTOARG*/) ;
    reg      CLK = 1'b0, RSTn = 1'b0, IR1 = 1'b1, IR2 = 1'b1, IR3 = 1'b1, SW = 1'b0;
    wire     dir, en;
 
-   task tDrv (input integer nDly,
-	      output IR);
+`ifdef SV
+   task automatic tDrv (input integer nDly,
+			ref  IR);
       begin
 	 repeat(nDly)@(posedge CLK);
-	 IR <= 1'b0;
-	 repeat(3)@(posedge CLK);
-	 IR <= 1'b1;
+	 IR = 1'b0;
+	 repeat(13)@(posedge CLK);
+	 IR = 1'b1;
       end
    endtask // repeat
+`else
    
    task tDrv1 (input integer nDly);
       begin
@@ -42,6 +44,7 @@ module Dir_test_tb (/*AUTOARG*/) ;
 	 IR3 <= 1'b1;
       end
    endtask // repeat
+`endif
 
    
    initial begin:my_initial
@@ -49,6 +52,19 @@ module Dir_test_tb (/*AUTOARG*/) ;
       repeat(1) @(posedge CLK);
       RSTn <= 1'b1;
       repeat(1) @(posedge CLK);
+`ifdef SV
+      fork 
+	 tDrv(1, IR1);
+	 tDrv(4, IR2);
+	 tDrv(8, IR3);
+      join
+      repeat(2) @(posedge CLK);
+      fork 
+	 tDrv(1, IR3);
+	 tDrv(4, IR2);
+	 tDrv(8, IR1);
+      join
+`else
       fork 
 	 tDrv1(1);
 	 tDrv2(4);
@@ -60,6 +76,7 @@ module Dir_test_tb (/*AUTOARG*/) ;
 	 tDrv2(4);
 	 tDrv1(8);
       join
+`endif
       repeat(5) @(posedge CLK);
       $stop;
       //$finish;
@@ -73,7 +90,6 @@ module Dir_test_tb (/*AUTOARG*/) ;
    $display("@%4t IR1:%b IR2:%b IR3:%b State:%4b", 
 	    $time, IR1, IR2, IR3, dut.State);
 `endif
-
    
    initial begin
       forever #5 CLK <= ~ CLK;

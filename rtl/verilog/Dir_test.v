@@ -3,38 +3,22 @@
 module  Dir_test
   (
    input      CLK, RSTn, IR1, IR2, IR3, SW,
-   output reg dir, en
+   output     en,
+   output reg dir
    );
-   reg 	      IR1Dly, IR2Dly, IR3Dly;
 
    localparam FW = 1'b1, BW = 1'b0;
 
 `ifdef SV
    typedef enum reg [3:0] {sHOME = 4'd0, 
-			   sFW1 , 
-			   sFW2 , 
-			   sFW3 , 
-			   sFW4 , 
-			   sFW5 , 
-			   sBW1 , 
-			   sBW2 , 
-			   sBW3 , 
-			   sBW4 , 
-			   sBW5 , 
+			   sFW1 , sFW2 , sFW3 , sFW4 , sFW5 , 
+			   sBW1 , sBW2 , sBW3 , sBW4 , sBW5 , 
 			   sEND}theState;
    theState  State, nState;
 `else
    localparam sHOME = 4'd0, 
-      sFW1 = 4'd1, 
-      sFW2 = 4'd2, 
-      sFW3 = 4'd3, 
-      sFW4 = 4'd4, 
-      sFW5 = 4'd5, 
-      sBW1 = 4'd6, 
-      sBW2 = 4'd7, 
-      sBW3 = 4'd8, 
-      sBW4 = 4'd9, 
-      sBW5 = 4'd10, 
+     sFW1 = 4'd1, sFW2 = 4'd2, sFW3 = 4'd3, sFW4 = 4'd4, sFW5 = 4'd5, 
+     sBW1 = 4'd6, sBW2 = 4'd7, sBW3 = 4'd8, sBW4 = 4'd9, sBW5 = 4'd10, 
      sEND = 4'd11;
    reg [3:0] 		  State, nState;
 `endif
@@ -50,9 +34,14 @@ module  Dir_test
       ,.rise_array( rise           )
       ,.fall_array( fall           ));
 
-   //   wire 		       start = fall[0];
-   //   wire 		       end_ir = fall[2];
-   //   wire 		       toHome = rise[0];
+   assign en = (State != sHOME) ? 1'b1 : 1'b0;
+
+   always@(posedge CLK, negedge RSTn)
+     if(!RSTn)
+       dir <= FW;
+     else
+       if(State == sEND)
+	 dir <= BW;
 
    // State Regster
    always@(posedge CLK, negedge RSTn)
@@ -81,12 +70,7 @@ module  Dir_test
 	endcase // case (State)
      end
 
-   always@(posedge CLK, negedge RSTn)
-     if(!RSTn)
-       dir <= FW;
-     else
-       if(State == sEND)
-	 dir <= BW;
+
    
 endmodule // Dir_test
 

@@ -7,7 +7,7 @@ VSIM =  vsim
 
 WORK = work
 ifdef SV
-VLOG_OPTIONS = -sv -lint -y $(VDIR) +libext+.v +incdir+$(VDIR) 
+VLOG_OPTIONS = -sv -lint -y $(VDIR) +libext+.v +incdir+$(VDIR) +define+SV
 else
 VLOG_OPTIONS = -lint -y $(VDIR) +libext+.v +incdir+$(VDIR) 
 endif
