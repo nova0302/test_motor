@@ -1,4 +1,4 @@
-//`define SV
+`define SV
 `timescale 1ns/10ps
 module  Dir_test
   (
@@ -13,7 +13,7 @@ module  Dir_test
    typedef enum reg [3:0] {sHOME = 4'd0, 
 			   sFW1 , sFW2 , sFW3 , sFW4 , sFW5 , 
 			   sBW1 , sBW2 , sBW3 , sBW4 , sBW5 , 
-			   sEND}theState;
+			   sEND, sDLY}theState;
    theState  State, nState;
 `else
    localparam sHOME = 4'd0, 
@@ -25,6 +25,7 @@ module  Dir_test
 
    localparam async_input_size = 3;
 
+   reg[20:0] dly_cnt;
    wire [async_input_size-1:0] rise, fall;
 
    edge_detect_array #(.N(async_input_size)) edge_detect_array_inst
@@ -61,7 +62,8 @@ module  Dir_test
 	  sFW3:  if(rise[2]) nState = sFW4;
 	  sFW4:  if(rise[1]) nState = sFW5;
 	  sFW5:  if(rise[0]) nState = sEND;
-	  sEND:  if(fall[0]) nState = sBW1;
+	  sEND:  if(fall[0]) nState = sDLY;
+	  sDLY:  if(dly_cnt[20]) nState = sBW1;
 	  sBW1:  if(fall[1]) nState = sBW2;
 	  sBW2:  if(fall[2]) nState = sBW3;
 	  sBW3:  if(rise[0]) nState = sBW4;
@@ -69,6 +71,16 @@ module  Dir_test
 	  sBW5:  if(rise[2]) nState = sHOME;
 	endcase // case (State)
      end
+   
+   always@(posedge CLK, posedge RSTn)
+     if(!RSTn)
+       dly_cnt <= 0;
+     else
+       if(State == sDLY)
+	 dly_cnt <=dly_cnt + 1;
+       else
+	 dly_cnt <= 0;
+
 
 
    

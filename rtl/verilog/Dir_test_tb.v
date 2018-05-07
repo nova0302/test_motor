@@ -1,4 +1,4 @@
-//`define SV
+`define SV
 `timescale 1ns/10ps
 
 module Dir_test_tb (/*AUTOARG*/) ;
@@ -12,17 +12,16 @@ module Dir_test_tb (/*AUTOARG*/) ;
       begin
 	 repeat(nDly)@(posedge CLK);
 	 IR = 1'b0;
-	 repeat(13)@(posedge CLK);
+	 repeat(43)@(posedge CLK);
 	 IR = 1'b1;
       end
    endtask // repeat
 `else
-   
    task tDrv1 (input integer nDly);
       begin
 	 repeat(nDly)@(posedge CLK);
 	 IR1 <= 1'b0;
-	 repeat(13)@(posedge CLK);
+	 repeat(43)@(posedge CLK);
 	 IR1 <= 1'b1;
       end
    endtask // repeat
@@ -31,7 +30,7 @@ module Dir_test_tb (/*AUTOARG*/) ;
       begin
 	 repeat(nDly)@(posedge CLK);
 	 IR2 <= 1'b0;
-	 repeat(13)@(posedge CLK);
+	 repeat(43)@(posedge CLK);
 	 IR2 <= 1'b1;
       end
    endtask // repeat
@@ -40,12 +39,12 @@ module Dir_test_tb (/*AUTOARG*/) ;
       begin
 	 repeat(nDly)@(posedge CLK);
 	 IR3 <= 1'b0;
-	 repeat(13)@(posedge CLK);
+	 repeat(43)@(posedge CLK);
 	 IR3 <= 1'b1;
       end
    endtask // repeat
+   
 `endif
-
    
    initial begin:my_initial
       integer i;
@@ -58,7 +57,7 @@ module Dir_test_tb (/*AUTOARG*/) ;
 	 tDrv(4, IR2);
 	 tDrv(8, IR3);
       join
-      repeat(2) @(posedge CLK);
+      repeat(32) @(posedge CLK);
       fork 
 	 tDrv(1, IR3);
 	 tDrv(4, IR2);
@@ -70,7 +69,7 @@ module Dir_test_tb (/*AUTOARG*/) ;
 	 tDrv2(4);
 	 tDrv3(8);
       join
-      repeat(2) @(posedge CLK);
+      repeat(32) @(posedge CLK);
       fork 
 	 tDrv3(1);
 	 tDrv2(4);
@@ -99,4 +98,3 @@ module Dir_test_tb (/*AUTOARG*/) ;
 
    
 endmodule // Dir_test_tb
-
